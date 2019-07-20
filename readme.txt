@@ -3,4 +3,4 @@ Git is free software distributed under the GPL.
 Git has a mutable index called stage.
 12345
 Git tracks changes of files.
-Create a new branch is quick.
+Create a new branch is quick & simple.
