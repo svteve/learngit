@@ -62,4 +62,110 @@ HEAD指向的版本就是当前版本，因此，Git允许我们在版本的历�
 分布式版本系统的最大好处之一是在本地工作完全不需要考虑远程库的存在，也就是有没有联网都可以正常工作，而SVN在没有联网的时候是拒绝干活的！当有网络的时候，再把本地提交推送一下就完成了同步，真是太方便了！
 
 4.分支管理
+4.1创建与合并分支
+创建分支并切换到新分支：git checkout -b dev
+这个命令相当于二个，分别为：git branch dev
+                            git checkout dev
+查看当前分支：Git branch
+切换为master分支：Git checkout master
+合并新分支到master：Git merge dev
+删除新分支：Git branch -d dev
+小结
+Git鼓励大量使用分支：
+
+查看分支：git branch
+创建分支：git branch <name>
+切换分支：git checkout <name>
+创建+切换分支：git checkout -b <name>
+合并某分支到当前分支：git merge <name>
+删除分支：git branch -d <name>
+
+4.2解决冲突
+小结
+当Git无法自动合并分支时，就必须首先解决冲突。解决冲突后，再提交，合并完成。
+解决冲突就是把Git合并失败的文件手动编辑为我们希望的内容，再提交。
+用git log --graph命令可以看到分支合并图。 git log --graph --pretty=oneline --abbrev-commit
+
+4.3分支管理策略
+小结
+Git分支十分强大，在团队开发中应该充分应用。
+命令：git merge --no-ff -m "merge with no-ff" 新分支名字
+合并分支时，加上--no-ff参数就可以用普通模式合并，合并后的历史有分支，能看出来曾经做过合并，而fast forward合并就看不出来曾经做过合并。
+
+4.4bug分支
+当你在一个分支上干活时，现在上级领导有个bug要求你2个小时内改掉，首先，先保存下你现在的工作空间，运行：Git stash，这时就可以出去干其他的了，进入该分支修复
+若现在master有bug，则创建一个临时分支,使用完之后删除掉就行了，创建临时分支，然后在这个分支空间里面修改bug，修改完之后，并加进分支（add，commit），然后合并到master分支中，运行Git merge --no-ff -m "merged fix bug-101“临时分支名字，最后删除，Git checkout -D bug-101,然后回到最开始的分支，继续工作，若不知道存在那，可以用：Git stash list看看，在恢复内容：用Git stash
+pop（apply，需要drop来删除）
+
+
+小结
+rebase操作可以把本地未push的分叉提交历史整理成直线；
+
+rebase的目的是使得我们在查看历史提交的变化时更容易，因为分叉的提交需要三方对比
+
+5.标签
+敲命令git tag <name>就可以打一个新标签,可以用命令git tag查看所有标签小结
+命令git tag <tagname>用于新建一个标签，默认为HEAD，也可以指定一个commit id；
+
+命令git tag -a <tagname> -m "blablabla..."可以指定标签信息；
+
+命令git tag可以查看所有标签。
+如果标签打错了，也可以删除：
+
+$ git tag -d v0.1
+Deleted tag 'v0.1' (was f15b0dd)
+因为创建的标签都只存储在本地，不会自动推送到远程。所以，打错的标签可以在本地安全删除。如果要推送某个标签到远程，使用命令git push origin <tagname>：或者，一次性推送全部尚未推送到远程的本地标签：
+
+$ git push origin --tags
+如果标签已经推送到远程，要删除远程标签就麻烦一点，先从本地删除：
+
+$ git tag -d v0.9
+然后，从远程删除。删除命令也是push，但是格式如下：
+
+$ git push origin :refs/tags/v0.9
+
+
+
+
+    操作标签
+    阅读: 716206
+    如果标签打错了，也可以删除：
+
+    $ git tag -d v0.1
+    Deleted tag 'v0.1' (was f15b0dd)
+    因为创建的标签都只存储在本地，不会自动推送到远程。所以，打错的标签可以在本地安全删除。
+
+    如果要推送某个标签到远程，使用命令git push origin <tagname>：
+
+    $ git push origin v1.0
+    Total 0 (delta 0), reused 0 (delta 0)
+    To github.com:michaelliao/learngit.git
+     * [new tag]         v1.0 -> v1.0
+     或者，一次性推送全部尚未推送到远程的本地标签：
+
+     $ git push origin --tags
+     Total 0 (delta 0), reused 0 (delta 0)
+     To github.com:michaelliao/learngit.git
+      * [new tag]         v0.9 -> v0.9
+      如果标签已经推送到远程，要删除远程标签就麻烦一点，先从本地删除：
+
+      $ git tag -d v0.9
+      Deleted tag 'v0.9' (was f52c633)
+      然后，从远程删除。删除命令也是push，但是格式如下：
+
+      $ git push origin :refs/tags/v0.9
+      To github.com:michaelliao/learngit.git
+       - [deleted]         v0.9
+       要看看是否真的从远程库删除了标签，可以登陆GitHub查看。
+
+
+
+       小结
+       命令git push origin <tagname>可以推送一个本地标签；
+
+       命令git push origin --tags可以推送全部未推送过的本地标签；
+
+       命令git tag -d <tagname>可以删除一个本地标签；
+
+       命令git push origin :refs/tags/<tagname>可以删除一个远程标签。
 
