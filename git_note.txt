@@ -1,0 +1,65 @@
+1.Git简介
+1.1.安装Git
+打开输入Git，若没有安装，会提示sudo apt-get install git
+安装完成之后，还需要最后一步设置，输入：
+  git config --global user.name "Your Name"
+  git config --global user.email  "email@example.com"
+
+1.2.创建版本库（.git）
+第一步：创建目录
+  mkdir learngit(你自己喜欢的名字)
+  cd learngit
+  pwd
+第二步: 把目录变成可以管理的仓库
+  在当前目录下运行：git init
+  用ls -al 可以看到隐藏的.git
+
+2.时光机
+创建文件readme.txt并写入内容，运行Git status查看结果可知，接下来要做的工作是
+Git add <文件名> 添加进暂存区
+Git commit -m <文件名> 提交进版本库
+Git status这个命令可以让我们随时掌握仓库的目标状态，以及做了什么，下面要做什么？
+还可以通过Git diff <文件名>查看文件是怎么修改的
+小结：
+要随时掌握工作区的状态，使用git status命令。
+如果git status告诉你有文件被修改过，用git diff可以查看修改内容。
+2.1版本回退
+小结
+现在总结一下：
+
+HEAD指向的版本就是当前版本，因此，Git允许我们在版本的历史之间穿梭，使用命令git reset --hard commit_id。
+穿梭前，用git log可以查看提交历史，以便确定要回退到哪个版本。
+要重返未来，用git reflog查看命令历史，以便确定要回到未来的哪个版本。
+2.2管理修改
+小结
+理解了Git是如何跟踪修改的，每次修改，如果不用git add到暂存区，那就不会加入到commit中。
+2.3撤销修改
+小结
+又到了小结时间。
+
+场景1：当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令git checkout -- file。
+场景2：当你不但改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改，分两步，第一步用命令git reset HEAD <file>，就回到了场景1，第二步按场景1操作。
+场景3：已经提交了不合适的修改到版本库时，想要撤销本次提交，参考版本回退一节，不过前提是没有推送到远程库。
+2,4删除文件
+二种选择：
+1.确实要从版本库中删除该文件，那就使用Git rm ，并且Git commit
+2.另一种情况是删错了，因为版本库里还有，所以使用Git checkout --《文件名》还原
+
+
+3.远程仓库（github）
+第一步：ssh-skygen -t rsa
+第二步：登录github，找到ssh设置，并添加id_public.rsa中的全部内容，然后提交。即可创建成功
+第三步：在github上添加远程仓库，自己就会，此处滤过
+第四步：将本地的仓库推送到github上，在本地的仓库目录下进行命令，
+        运行：Git remote add origin “自己的github地址”
+第五步：推送内容，运行：Git push -u origin master，刷新github，即可看到
+第六步：现在开始，只要本地提交，即可：Git push origin master
+第七部：克隆远程库，采用Git clone 自己的Git地址（https太慢）
+小结：
+要关联一个远程库，使用命令git remote add origin git@server-name:path/repo-name.git；
+关联后，使用命令git push -u origin master第一次推送master分支的所有内容；
+此后，每次本地提交后，只要有必要，就可以使用命令git push origin master推送最新修改；
+分布式版本系统的最大好处之一是在本地工作完全不需要考虑远程库的存在，也就是有没有联网都可以正常工作，而SVN在没有联网的时候是拒绝干活的！当有网络的时候，再把本地提交推送一下就完成了同步，真是太方便了！
+
+4.分支管理
+
